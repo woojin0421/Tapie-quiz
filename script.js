@@ -5,7 +5,8 @@ const quizData = [
         question: "다음 중 올바른 테이피의 스펠링은?",
         options: ["TAPEI", "TAPIE", "TAIPE", "TEAPI"],
         correct: 1,
-        points: 6
+        points: 6,
+        timeLimit: 5
     },
     {
         question: "다음 중 선린 동문이 아닌 사람은?",
@@ -17,13 +18,15 @@ const quizData = [
         ],
         correct: 3,
         points: 6,
-        hasImages: true
+        hasImages: true,
+        timeLimit: 7
     },
     {
         question: "1호관 2층은 어떤 과가 사용하나요?",
         options: ["소프트웨어과", "정보보호과", "콘텐츠디자인과", "IT경영과"],
         correct: 1,
-        points: 6
+        points: 6,
+        timeLimit: 5
     },
     {
         question: "다음 중 매점에 없는 음식은?",
@@ -35,43 +38,50 @@ const quizData = [
         ],
         correct: 2,
         points: 6,
-        hasImages: true
+        hasImages: true,
+        timeLimit: 7
     },
     {
         question: "선린 학생회 이름은?",
         options: ["BACK-UP", "SPARK", "FLAME", "BRIGHT"],
         correct: 1,
-        points: 6
+        points: 6,
+        timeLimit: 5
     },
     {
         question: "교가 맨 마지막 가사는?",
         options: ["선린의 터를", "선린의 땅을", "선린에 터를", "선린의 하늘을"],
         correct: 0,
-        points: 6
+        points: 6,
+        timeLimit: 5
     },
     {
         question: "교가 맨 처음 가사는?",
         options: ["저 높은 남산 위에 우뚝 선", "드 높은 남산 위에 우뚝 선", "드 넓은 남산 위에 우뚝 선", "드 높은 남산 중에 우뚝 선"],
         correct: 1,
-        points: 6
+        points: 6,
+        timeLimit: 5
     },
     {
         question: "현재 1학년(120기)의 학급 개수는?",
         options: ["8개", "12개", "10개", "14개"],
         correct: 2,
-        points: 6
+        points: 6,
+        timeLimit: 5
     },
     {
         question: "콘텐츠디자인과의 옛이름은?",
         options: ["산업디자인과", "멀티미디어과", "콘텐츠미디어디자인과", "멀티디자인과"],
         correct: 1,
-        points: 6
+        points: 6,
+        timeLimit: 5
     },
     {
         question: "다음 중 TAPIE 부실의 위치는?",
         options: ["341실", "343실", "데이터과학실", "인공지능실"],
         correct: 1,
-        points: 6
+        points: 6,
+        timeLimit: 5
     },
     
     // 8점 문제들
@@ -80,31 +90,36 @@ const quizData = [
         options: ["정우진", "설우진", "이우진", "김우진"],
         correct: [0, 2], // 다중 선택
         points: 8,
-        multiSelect: true
+        multiSelect: true,
+        timeLimit: 6
     },
     {
         question: "교문에 들어오자마자 보이는 비석에 새겨져있는 문구는?",
         options: ["白年을 딛고 于年을 날자", "百年을 딛고 千年을 날자", "千年을 딛고 萬年을 날자", "千年을 딛고 百年을 날자"],
         correct: 1,
-        points: 8
+        points: 8,
+        timeLimit: 7
     },
     {
         question: "선린인고의 전공동아리는 총 몇 개인가요?",
         options: ["12개", "15개", "8개", "13개"],
         correct: 1,
-        points: 8
+        points: 8,
+        timeLimit: 5
     },
     {
         question: "선린인고의 교훈은?",
         options: ["참된 일꾼이 되자", "세계로 미래로 꿈을 펼치자", "성실한 일꾼이 되자", "세계로 미래로 나아가자"],
         correct: 1,
-        points: 8
+        points: 8,
+        timeLimit: 5
     },
     {
         question: "선린인고 공식 홈페이지 주소는?",
         options: ["https://sunrint.sen.hs.kr/", "https://sunrin.sen.hs.kr/", "https://sunrint.hs.kr/", "https://sunrin.hs.kr/"],
         correct: 0,
-        points: 8
+        points: 8,
+        timeLimit: 7
     }
 ];
 
@@ -156,7 +171,8 @@ function init() {
     
     homeBtn.onclick = () => {
         cancelAutoReturn();
-        goHome();
+        // 직접 goHome 호출 (자동 복귀 모달 없이)
+        directGoHome();
     };
     
     // 입력 검증
@@ -347,8 +363,27 @@ function startQuiz() {
         return;
     }
     
+    // 안내 모달 표시
+    const modal = document.getElementById('game-info-modal');
+    modal.style.display = 'flex';
+}
+
+// 안내 모달 닫기
+function closeGameInfo() {
+    const modal = document.getElementById('game-info-modal');
+    modal.style.display = 'none';
+}
+
+// 안내 후 실제 퀴즈 시작
+function startQuizAfterInfo() {
+    const nickname = nicknameInput.value.trim();
+    const department = departmentSelect.value;
+    
     playerName = nickname;
     playerDepartment = department;
+    
+    // 안내 모달 닫기
+    closeGameInfo();
     
     // 퀴즈 데이터 섞기
     shuffleArray(quizData);
@@ -399,6 +434,9 @@ function displayQuestion() {
         const optionElement = document.createElement('div');
         optionElement.className = 'option';
         
+        // 원본 인덱스를 데이터 속성으로 저장
+        optionElement.setAttribute('data-original-index', option.originalIndex);
+        
         // 클릭 활성화
         optionElement.style.pointerEvents = 'auto';
         optionElement.style.cursor = 'pointer';
@@ -431,8 +469,8 @@ function displayQuestion() {
         optionsContainer.appendChild(submitButton);
     }
     
-    // 타이머 표시 숨기기
-    timerElement.style.display = 'none';
+    // 타이머 시작
+    startTimer(question.timeLimit || 5);
 }
 
 // 다중선택 옵션 선택
@@ -462,6 +500,11 @@ function submitMultipleAnswer(correctAnswerArray) {
     const options = document.querySelectorAll('.option');
     const submitBtn = document.querySelector('.submit-btn');
     
+    // 타이머가 있다면 정리
+    if (timer) {
+        clearInterval(timer);
+    }
+    
     // 제출 버튼 비활성화
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.6';
@@ -485,7 +528,8 @@ function submitMultipleAnswer(correctAnswerArray) {
         options.forEach((option, index) => {
             if (index === options.length - 1) return; // 제출 버튼 제외
             
-            const optionOriginalIndex = getOriginalIndexFromElement(option, index);
+            // 데이터 속성에서 원본 인덱스 가져오기
+            const optionOriginalIndex = parseInt(option.getAttribute('data-original-index'));
             
             if (correctAnswerArray.includes(optionOriginalIndex)) {
                 option.classList.add('correct');
@@ -546,9 +590,8 @@ function selectOption(selectedIndex, originalIndex, correctIndex) {
     // 정답/오답 표시
     setTimeout(() => {
         options.forEach((option, index) => {
-            const optionOriginalIndex = quizData[currentQuestionIndex].hasImages
-                ? quizData[currentQuestionIndex].options.findIndex(opt => opt.text === option.querySelector('.option-text')?.textContent || option.textContent)
-                : quizData[currentQuestionIndex].options.findIndex(opt => opt === option.textContent);
+            // 데이터 속성에서 원본 인덱스 가져오기
+            const optionOriginalIndex = parseInt(option.getAttribute('data-original-index'));
             
             if (optionOriginalIndex === correctIndex) {
                 option.classList.add('correct');
@@ -571,10 +614,16 @@ function selectOption(selectedIndex, originalIndex, correctIndex) {
 }
 
 // 타이머 시작
-function startTimer() {
-    timeLeft = 5;
+function startTimer(duration = 5) {
+    // 기존 타이머가 있으면 먼저 정리
+    if (timer) {
+        clearInterval(timer);
+    }
+    
+    timeLeft = duration;
     timerElement.textContent = timeLeft;
     timerElement.classList.remove('warning');
+    timerElement.style.display = 'block'; // 타이머 표시
     
     timer = setInterval(() => {
         timeLeft--;
@@ -587,16 +636,63 @@ function startTimer() {
         
         if (timeLeft <= 0) {
             clearInterval(timer);
-            // 시간 초과 시 다음 문제로
-            setTimeout(() => {
-                nextQuestion();
-            }, 500);
+            // 시간 초과 시 정답 표시 후 다음 문제로
+            showCorrectAnswerOnTimeout();
         }
     }, 1000);
 }
 
+// 시간 초과 시 정답 표시
+function showCorrectAnswerOnTimeout() {
+    // 이미 답이 선택되었거나 정답이 표시된 상태면 실행하지 않음
+    if (document.querySelector('.option.selected') || document.querySelector('.option.correct') || document.querySelector('.option.incorrect')) {
+        return;
+    }
+    
+    const question = quizData[currentQuestionIndex];
+    const options = document.querySelectorAll('.option');
+    
+    // 모든 옵션 클릭 비활성화
+    options.forEach(option => {
+        option.style.pointerEvents = 'none';
+    });
+    
+    // 정답 표시
+    if (question.multiSelect) {
+        // 다중선택 문제
+        options.forEach((option, index) => {
+            if (index === options.length - 1) return; // 제출 버튼 제외
+            
+            const optionOriginalIndex = parseInt(option.getAttribute('data-original-index'));
+            
+            if (question.correct.includes(optionOriginalIndex)) {
+                option.classList.add('correct');
+            }
+        });
+    } else {
+        // 단일선택 문제
+        options.forEach((option) => {
+            const optionOriginalIndex = parseInt(option.getAttribute('data-original-index'));
+            
+            if (optionOriginalIndex === question.correct) {
+                option.classList.add('correct');
+            }
+        });
+    }
+    
+    // 2초 후 다음 문제로
+    setTimeout(() => {
+        nextQuestion();
+    }, 2000);
+}
+
 // 다음 문제
 function nextQuestion() {
+    // 타이머가 있으면 정리
+    if (timer) {
+        clearInterval(timer);
+    }
+    
     currentQuestionIndex++;
     
     if (currentQuestionIndex < quizData.length) {
@@ -852,6 +948,34 @@ function goHome() {
     nicknameInput.value = '';
     departmentSelect.value = '';
     validateInputs();
+}
+
+// 직접 처음으로 (자동 복귀 없이)
+function directGoHome() {
+    // 모든 타이머 정리
+    if (window.autoReturnTimer) {
+        clearInterval(window.autoReturnTimer);
+        window.autoReturnTimer = null;
+    }
+    
+    if (window.inactivityTimer) {
+        clearTimeout(window.inactivityTimer);
+        window.inactivityTimer = null;
+    }
+    
+    // 활동 감지 이벤트 리스너 제거
+    if (window.activityEvents && window.resetInactivityTimer) {
+        window.activityEvents.forEach(event => {
+            document.removeEventListener(event, window.resetInactivityTimer, true);
+        });
+    }
+    
+    // 모든 모달 숨기기
+    document.getElementById('auto-return-modal').style.display = 'none';
+    document.getElementById('rank-announcement-modal').style.display = 'none';
+    
+    // 처음 화면으로 이동
+    goHome();
 }
 
 // 페이지 로드 시 초기화

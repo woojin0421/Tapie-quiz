@@ -135,6 +135,28 @@
         </div>
     </div>
 
+    <!-- 게임 시작 안내 모달 -->
+    <div id="game-info-modal" class="modal">
+        <div class="modal-content">
+            <h3>퀴즈 안내</h3>
+            <div class="game-info">
+                <p><strong>각 문제마다 제한시간이 주어집니다</strong></p>
+                <ul>
+                    <li>일반 문제: <strong>5초</strong></li>
+                    <li>사진 문제: <strong>7초</strong></li>
+                    <li>다중선택 문제: <strong>6초</strong></li>
+                    <li>주소 문제: <strong>7초</strong></li>
+                </ul>
+                <p>시간이 초과되면 자동으로 다음 문제로 넘어갑니다</p>
+                <p>총 15문제, 100점 만점입니다</p>
+            </div>
+            <div class="modal-buttons">
+                <button onclick="startQuizAfterInfo()" class="btn primary">시작하기</button>
+                <button onclick="closeGameInfo()" class="btn secondary">취소</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 순위 알림 모달 -->
     <div id="rank-announcement-modal" class="modal">
         <div class="modal-content">
@@ -156,7 +178,7 @@
             <h3>퀴즈 완료!</h3>
             <div class="countdown-display">
                 <div class="countdown-number" id="countdown-number">3</div>
-                <p>3초 후 처음 화면으로 돌아갑니다</p>
+                <p>초 후 처음 화면으로 돌아갑니다</p>
             </div>
             <div class="modal-buttons">
                 <button onclick="cancelAutoReturn()" class="btn secondary">머물기</button>
