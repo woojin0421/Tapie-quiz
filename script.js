@@ -34,7 +34,7 @@ const quizData = [
             { text: "참치마요컵밥", image: "https://th.bing.com/th/id/OIP.2dddQ8gGCEkXk6DcWJkYGQHaHa?w=173&h=180&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3" },
             { text: "요맘때", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNMBHbjg3MAVAM3vu5uhQNcoEkZfVufB2vHA&s" },
             { text: "죠스바", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIjRcbY3X46PR6-JXT22cZTfaBTMMyBxfF2Q&s" },
-            { text: "매운새우깡", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyQYqSodMqlOA53b4RYskr84s9THxqvKVkRg&s" },
+            { text: "도도한 나쵸칩", image: "https://th.bing.com/th/id/OIP.3ULEvRdqA7c2RT8oC5vgxAHaHa?w=214&h=214&c=7&r=0&o=7&dpr=1.8&pid=1.7&rm=3" },
         ],
         correct: 2,
         points: 6,
